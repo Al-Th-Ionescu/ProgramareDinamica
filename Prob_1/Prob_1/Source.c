@@ -3,74 +3,39 @@
 #include <string.h>
 #pragma warning(disable : 4996)
 
+int sp[100001];
+
 int main()
 {
-	int n, * v, j, i, s, * t, *contor;
-	FILE* f, *g;
+	FILE* f, * g;
 	f = fopen("date.in", "r");
-	g = fopen("date.out", "w"); 
+	g = fopen("date.out", "w");
+	int* m, n, s, ss, i;
 	fscanf(f, "%d", &n);
-	v = calloc((n+1), sizeof(int));
-	t = calloc(n+1, sizeof(int));
-	contor = calloc(n + 1, sizeof(int));
+	m = malloc((n+1) * sizeof(int));
 	for (i = 1; i <= n; i++)
-		fscanf(f, "%d", &v[i]);
+		fscanf(f, "%d", &m[i]);
 	fscanf(f, "%d", &s);
 	fclose(f);
-	j = n+1;
-	conditie:
-	while (j != 0)
+	sp[0] = 1;
+	for (i = 1; i <= n; i++)
+		for (ss = s - m[i]; ss >= 0; ss--)
+			if (sp[ss] && sp[ss + m[i]] == 0)
+				sp[ss + m[i]] = i;
+	if (sp[s])
 	{
-		j--;
-		if (v[j] <= s)
+		int sc = s;
+		while (sc)
 		{
-			t[j] = v[j];
-			break;
+			fprintf(g, "%d ", sp[sc]);
+			sc -= m[sp[sc]];
 		}
-		j--; 
 	}
-	printf("%d ~~", j);
-		i = j;
-		while (i > 0)
-		{
-			printf("%d ", t[i]);
-			if (s == t[i])
-			{
-				fprintf(g, "%d", i);
-				break;
-			}
-			if (s >= t[i])
-			{
-				if (s >= t[i] + v[i - 1])
-				{	
-					t[i - 1] = t[i] + v[i - 1];
-					if (contor[i] == 0)
-					fprintf(g, "%d ", i);
-					}
-				else if (s < t[i] + v[i - 1])
-				{
-					t[i - 1] = t[i];
-					contor[i-1]=1;
-					if (contor[i] == 0)
-					fprintf(g, "%d ", i);
-
-				}
-				i--;
-			}
-			else
-			{
-				i--;
-			}
-			if (i == 0) {
-				memset(contor, 0, j* sizeof(int));
-				fseek(g, 0, SEEK_SET);
-				goto conditie;
-			}
-		}
-	
+	else fprintf(g, "nu se poate obtine suma");
 	fclose(g);
-	free(contor);
-	free(v);
-	free(t);
+	free(m);
 	return 0;
+
+			
+
 }
