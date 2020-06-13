@@ -18,7 +18,6 @@ int main()
 	t = (int**)calloc(n, sizeof(int*));
 	smin = (int**)calloc(n, sizeof(int*));
 	for (int i = 0; i < n; i++)
-		for (j = 0; j < i + 1; j++)
 		{
 			t[i] = (int*)calloc(i + 1, sizeof(int));
 			smin[i] = (int*)calloc(i + 1, sizeof(int));
